@@ -1,10 +1,11 @@
 import React from "react"
-import { useSelector, useDispatch } from "react-redux"
+import Notification from "./components/Notification"
 const App = () => {
-  const notification = useSelector((state) => state)
-  console.log(notification)
-
-  return <div>hi there</div>
+  return (
+    <>
+      <Notification />
+    </>
+  )
 }
 
 export default App
