@@ -3,7 +3,7 @@ import notificationReducer from "./src/reducers/notificationReducer"
 
 const store = configureStore({
   reducer: {
-    notifications: notificationReducer,
+    notification: notificationReducer,
   },
 })
 
