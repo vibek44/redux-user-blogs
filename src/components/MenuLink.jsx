@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-const MenuLink = () => {
+const MenuLink = ({ user }) => {
   const Style = {
     paddingRight: 5,
   }
@@ -16,9 +16,13 @@ const MenuLink = () => {
       <Link style={Style} to='/users'>
         users
       </Link>
-      <Link style={Style} to='/login'>
-        login
-      </Link>
+      {user ? (
+        <em>{user} logged in</em>
+      ) : (
+        <Link style={Style} to='/login'>
+          login
+        </Link>
+      )}
     </div>
   )
 }
