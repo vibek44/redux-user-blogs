@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 const Home = () => {
   return (
@@ -6,7 +7,10 @@ const Home = () => {
       <h2>Welcome to Bloglist App</h2>
       <p>
         login to
-        <em> continue</em>
+        <Link to='/login'>
+          {' '}
+          <em> continue</em>
+        </Link>
       </p>
     </div>
   )
