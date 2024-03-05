@@ -17,7 +17,7 @@ const MenuLink = ({ user }) => {
         users
       </Link>
       {user ? (
-        <em>{user} logged in</em>
+        <em>{user.username} logged in</em>
       ) : (
         <Link style={Style} to='/login'>
           login
