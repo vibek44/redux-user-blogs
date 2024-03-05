@@ -1,7 +1,17 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-const Home = () => {
+const Home = ({ user }) => {
+  if (user)
+    return (
+      <div>
+        <p>welcome {user.username} to App Bloglist</p>
+        <em>
+          please continue to search for blogs and <b>create</b> your own
+        </em>
+      </div>
+    )
+
   return (
     <div>
       <h2>Welcome to Bloglist App</h2>
