@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Notification from './components/Notification'
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom'
 import MenuLink from './components/MenuLink'
 import Home from './components/Home'
 import Users from './components/Users'
@@ -10,7 +10,16 @@ import Footer from './components/Footer'
 import { useUser } from './customHooks/index'
 
 const App = () => {
-  const { user } = useUser()
+  const navigate = useNavigate()
+  const [credential, setCredential] = useState(null)
+
+  const user = useUser(credential)
+  console.log(user)
+
+  const handleLogin = async (credentials) => {
+    setCredential(credentials)
+    navigate('/')
+  }
 
   return (
     <div>
@@ -21,11 +30,14 @@ const App = () => {
       <Routes>
         <Route
           path='/users'
-          element={user ? <Users /> : <Navigate replace to='/login' />}
+          element={user ? <Users user={user} /> : <Navigate to='/login' />}
         />
-        <Route path='/login' element={<LoginForm />} />
-        <Route path='/blogs' element={<Blogs />}></Route>
-        <Route path='/' element={<Home />} />
+        <Route
+          path='/login'
+          element={<LoginForm handleLogin={handleLogin} />}
+        />
+        <Route path='/blogs' element={<Blogs user={user} />}></Route>
+        <Route path='/' element={<Home user={user} />} />
       </Routes>
       <Footer />
     </div>
