@@ -13,7 +13,7 @@ const notificationSlice = createSlice({
 export const { addNotification } = notificationSlice.actions
 
 export const setNotification = (notification) => {
-  return async (dispatch, getState) => {
+  return (dispatch) => {
     dispatch(addNotification(notification))
     setTimeout(() => {
       dispatch(addNotification(''))
