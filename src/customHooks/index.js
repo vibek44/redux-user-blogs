@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import request from '../requestService/user'
+import { verifyUser } from '../requestService/user'
 import { useDispatch } from 'react-redux'
 import { setNotification } from '../reducers/notificationReducer'
 import { useNavigate } from 'react-router-dom'
@@ -18,8 +18,7 @@ export const useUser = (credential) => {
   }, [])
   useEffect(() => {
     if (credential) {
-      request
-        .verifyUser(credential)
+      verifyUser(credential)
         .then((data) => {
           setUser(data)
           localStorage.setItem('loggedUser', JSON.stringify(data))
