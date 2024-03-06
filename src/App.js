@@ -21,12 +21,16 @@ const App = () => {
     navigate('/')
   }
 
+  const handleLogOut = () => {
+    setCredential(null)
+  }
+
   return (
     <div>
       <Notification />
       <h2>Bloglist App</h2>
 
-      <MenuLink user={user} />
+      <MenuLink user={user} handleLogOut={handleLogOut} />
       <Routes>
         <Route
           path='/users'
