@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
-import { UseDispatch, useDispatch } from 'react-redux'
+import request from '../requestService/user'
+import { useDispatch } from 'react-redux'
 import { setNotification } from '../reducers/notificationReducer'
 import { useNavigate } from 'react-router-dom'
-const baseUrl = 'http://localhost:3003/api/login'
 
 export const useUser = (credential) => {
   const navigate = useNavigate()
@@ -11,17 +10,31 @@ export const useUser = (credential) => {
   const [user, setUser] = useState(null)
 
   useEffect(() => {
+    const loggedUserJSON = localStorage.getItem('loggedUser')
+    if (loggedUserJSON) {
+      const loggedUser = JSON.parse(loggedUserJSON)
+      setUser(loggedUser)
+    }
+  }, [])
+  useEffect(() => {
     if (credential) {
-      axios
-        .post(baseUrl, credential)
-        .then((res) => {
-          //console.log(res.data)
-          setUser(res.data)
+      request
+        .verifyUser(credential)
+        .then((data) => {
+          setUser(data)
+          localStorage.setItem('loggedUser', JSON.stringify(data))
         })
         .catch((error) => {
           dispatch(setNotification(error.response.data.error))
           navigate('/login')
         })
+    }
+  }, [credential])
+
+  useEffect(() => {
+    if (credential === null) {
+      window.localStorage.removeItem('loggedUser')
+      setUser(null)
     }
   }, [credential])
 
