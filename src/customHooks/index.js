@@ -3,6 +3,7 @@ import { verifyUser } from '../requestService/user'
 import { useDispatch } from 'react-redux'
 import { setNotification } from '../reducers/notificationReducer'
 import { useNavigate } from 'react-router-dom'
+import blogService from '../requestService/blog'
 
 export const useUser = (credential) => {
   const navigate = useNavigate()
@@ -14,6 +15,7 @@ export const useUser = (credential) => {
     if (loggedUserJSON) {
       const loggedUser = JSON.parse(loggedUserJSON)
       setUser(loggedUser)
+      blogService.setToken(loggedUser.token)
     }
   }, [])
   useEffect(() => {
@@ -22,6 +24,7 @@ export const useUser = (credential) => {
         .then((data) => {
           setUser(data)
           localStorage.setItem('loggedUser', JSON.stringify(data))
+          blogService.setToken(data.token)
         })
         .catch((error) => {
           dispatch(setNotification(error.response.data.error))
