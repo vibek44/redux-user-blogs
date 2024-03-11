@@ -1,46 +1,55 @@
 import React, { useEffect, useState } from 'react'
-import { verifyUser } from '../requestService/user'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setNotification } from '../reducers/notificationReducer'
+import { setUser } from '../reducers/userReducer'
+import { setBlogs } from '../reducers/blogReducer'
 import { useNavigate } from 'react-router-dom'
+import { verifyUser } from '../requestService/user'
 import blogService from '../requestService/blog'
 
-export const useUser = (credential) => {
+export const useHooks = (credential) => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const [user, setUser] = useState(null)
+  const user = useSelector((state) => state.user)
+  const blogs = useSelector((state) => state.blogs)
+  const notification = useSelector((state) => state.notification)
 
   useEffect(() => {
-    const loggedUserJSON = localStorage.getItem('loggedUser')
-    if (loggedUserJSON) {
-      const loggedUser = JSON.parse(loggedUserJSON)
-      setUser(loggedUser)
-      blogService.setToken(loggedUser.token)
-    }
-  }, [])
-  useEffect(() => {
+    //useEffect callback function cant be async
+
     if (credential) {
       verifyUser(credential)
         .then((data) => {
-          setUser(data)
-          localStorage.setItem('loggedUser', JSON.stringify(data))
+          dispatch(setUser(data))
           blogService.setToken(data.token)
+          navigate('/users')
         })
         .catch((error) => {
           dispatch(setNotification(error.response.data.error))
-          navigate('/login')
+          setTimeout(() => {
+            dispatch(setNotification(''))
+          }, 3000)
         })
     }
   }, [credential])
 
   useEffect(() => {
-    if (credential === null) {
-      window.localStorage.removeItem('loggedUser')
-      setUser(null)
+    if (user) {
+      blogService
+        .getAll()
+        .then((data) => {
+          dispatch(setBlogs(data))
+        })
+        .catch((error) => {
+          dispatch(setNotification(error.response.data.error))
+          setTimeout(() => {
+            dispatch(setNotification(''))
+          }, 3000)
+        })
     }
-  }, [credential])
+  }, [user])
 
-  return user
+  return { user, blogs, notification }
 }
 
 export const useField = (type) => {
