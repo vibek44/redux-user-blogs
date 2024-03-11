@@ -21,6 +21,9 @@ const MenuLink = ({ user, handleLogOut }) => {
         <>
           <em>{user.username} logged in</em>
           <button onClick={handleLogOut}>Logout</button>
+          <Link style={Style} to='/create'>
+            create blog
+          </Link>
         </>
       ) : (
         <Link style={Style} to='/login'>
